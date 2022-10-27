@@ -14,9 +14,30 @@ void printVector(vector<string> tmp)
     cout << endl;
 }
 
-bool dfs(vector<string> gems, vector<string>& gems_name, vector<string> selected_list, int start) {
+bool isExist(vector<string>& selected_list, string gem) {
+    for(int i = 0; i < selected_list.size(); i++) {
+        if (selected_list[i] == gem) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void addSelectedList(vector<string>& selected_list, string gem) {
+    if (!isExist(selected_list, gem)) {
+        selected_list.push_back(gem);
+    }
+}
+
+bool dfs(vector<string> gems, vector<string>& gems_name, vector<string> selected_list, int start, int end) {
     if (gems_name.size() == selected_list.size()) 
         return true;
+    if (start >= gems.size())
+        return false;
+
+    int index = start;
+    addSelectedList(selected_list, gems[start]);
+    bool ret = dfs(gems, gems_name, selected_list, start, end);
     
     return false;
 }
@@ -30,7 +51,7 @@ vector<int> solution(vector<string> gems)
     sort(gems_name.begin(), gems_name.end());
     gems_name.erase(unique(gems_name.begin(), gems_name.end()), gems_name.end());
     for (int i = 0; i < gems.size() - gems_name.size(); i++) {
-        dfs(gems, gems_name, selected_list, i);
+        dfs(gems, gems_name, selected_list, i, 0);
         gems.erase(gems.begin());
         i--;
     } 
