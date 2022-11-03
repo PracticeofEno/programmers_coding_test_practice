@@ -245,24 +245,24 @@ void checkRotateHorizental(const vector<vector<int>> &board, const vector<vector
     else if (direction == 1)
     {
         // 밑측 기준으로 우회전할수 있는가? ㅡ 모양
-        if (current[0][1] + 1 >= board.size())
+        if (current[1][1] + 1 < board.size())
         {
             if (board[current[0][0]][current[0][1] + 1] != 1 && board[current[1][0]][current[1][1] + 1] != 1)
             {
                 vector<vector<int>> tmp = current;
-                tmp[1][0] = current[0][0];
-                tmp[1][1] = current[0][1] + 1;
+                tmp[0][0] = current[0][0] + 1;
+                tmp[1][1] = current[1][1] + 1;
                 addQueue(tmp, visited, q, count);
             }
         }
         // 밑측 기준으로 좌회전할 수 있는가? <--여기부터
-        if (current[0][1] - 1 >= 0)
+        if (current[1][1] - 1 >= 0)
         {
             if (board[current[0][0]][current[0][1] - 1] != 1 && board[current[1][0]][current[1][1] - 1] != 1)
             {
                 vector<vector<int>> tmp = current;
-                tmp[0][1] = current[0][1] - 1;
-                tmp[1][0] = current[1][0] - 1;
+                tmp[0][0] = current[0][0] + 1;
+                tmp[0][1] = current[1][1] - 1;
                 addQueue(tmp, visited, q, count);
             }
         }
@@ -298,13 +298,16 @@ int solution(vector<vector<int>> board)
     vector<vector<int>> current;
     current.push_back(x);
     current.push_back(y);
-    visited.insert(std::pair<vector<vector<int>>, int>(current, -1));
+    visited.insert(std::pair<vector<vector<int>>, int>(current, 0));
     int state = 0;
 
     q.push(current);
     while (q.size() != 0)
     {
         vector<vector<int>> tmp = q.front();
+        if ((tmp[0][0] == board.size() - 1 && tmp[0][1] == board.size() - 1) || (tmp[1][0] == board.size() -1 && tmp[1][1] == board.size() - 1)) {
+            answer.push_back(visited.find(tmp)->second);
+        }
         int count = 0;
         if (visited.find(tmp) != visited.end())
         {
@@ -313,9 +316,7 @@ int solution(vector<vector<int>> board)
         }
         else
             count = 0;
-        if ((tmp[0][0] == board.size() - 1 && tmp[0][1] == board.size() - 1) || (tmp[1][0] == board.size() -1 && tmp[1][1] == board.size() - 1)) {
-            answer.push_back(count - 1);
-        }
+        
         BFS(board, tmp, q, visited, count);
         q.pop();
     }
