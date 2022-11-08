@@ -28,7 +28,8 @@
                 }
             ],
             "preLaunchTask": "C/C++: clang++ 활성 파일 빌드",
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "/usr/bin/gdb",
+            "showDisplayString": true
         }
     ]
 }
