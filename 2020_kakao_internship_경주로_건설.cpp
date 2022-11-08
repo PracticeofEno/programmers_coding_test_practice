@@ -13,22 +13,12 @@ bool checkCondition(vector<vector<int>> &board, vector<int> data, map<vector<int
         if (board[data[1]][data[0]] == 0)
         {
             if (state != data[2])
-            {
                 data[3] = data[3] + 600;
-            }
             else
-            {
                 data[3] = data[3] + 100;
-            }
 
             vector<int> tmp = {data[0], data[1]};
             vector<int> tmp2 = min_fares.find(tmp)->second;
-            int small = 0;
-            if (tmp2[0] < tmp2[1])
-                small = 0;
-            else
-                small = 1;
-
             if (data[3] <= tmp2[state])
             {
                 min_fares.find(tmp)->second[state] = data[3];
