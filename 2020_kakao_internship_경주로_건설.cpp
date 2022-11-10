@@ -103,7 +103,6 @@ int solution(vector<vector<int>> board)
         tmp.push_back(fare);
         checkCondition(board, tmp, min_fares, q, 1);
         tmp.clear();
-
         q.pop();
     }
 
