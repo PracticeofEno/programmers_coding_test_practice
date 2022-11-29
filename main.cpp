@@ -2,67 +2,53 @@
 
 using namespace std;
 
-int getAnswer(int e, int start, vector<int> &arr)
+bool cmp(vector<int> &a, vector<int> &b)
 {
-    int index = -1;
-    int max = -1;
-    for (int i = start; i <= e; i++)
-    {
-        if (max < arr[i])
-        {
-            index = i;
-            max = arr[i];
-        }
-    }
-    return index;
+    if (a[1] == b[1])
+        return a[0] < b[0];
+    return a[1] > b[1];
 }
 
 vector<int> solution(int e, vector<int> starts)
 {
     vector<int> answer;
 
-    vector<int> arr2(100000001, 0);
+    vector<vector<int>> arr2;
     map<int, int> available;
     int answer_index = -1;
     int max = -1;
 
-    for (int i = 1; i <= 100000000; i++)
+    for (int i = 0; i <= e; i++)
     {
-        if (i > e)
-        {
-            break;
-        }
-        available.insert(pair<int, int>(i, i));
+        vector<int> tmp;
+        tmp.push_back(i);
+        tmp.push_back(0);
+        arr2.push_back(tmp);
     }
-    while (available.size() > 0)
+    for (int i = 2; i <= e; i++)
     {
-        map<int, int>::iterator it;
-        for (it = available.begin(); it != available.end(); it++)
-        {
-            arr2[it->second] = arr2[it->second] + 1;
-            it->second = it->second + it->first;
-            if (it->second > 5000000)
-            {
-                if (available.size() > 1)
-                {
-                    map<int, int>::iterator tmp = (--it);
-                    it++;
-                    available.erase(it);
-                    it = tmp;
-                }
-                else
-                {
-                    available.erase(it);
-                    break;
-                }
+        int count = 0;
+        for(int j = 1 ; j <= sqrt(i) ; j++){
+             if(i % j == 0) {
+                count++;
+                if(i / j != j) 
+                    count++;
             }
-        }
+        }   
+        arr2[i][1] = count;
     }
+    sort(arr2.begin(), arr2.begin() + e + 1, cmp);
 
     for (int i = 0; i < starts.size(); i++)
     {
-        int k = getAnswer(e, starts[i], arr2);
-        answer.push_back(k);
+        for(int j = 0; j <= e; j++) {
+            if (arr2[j][0] >= starts[i])
+            {
+                int k = arr2[j][0];
+                answer.push_back(k);
+                break;
+            }
+        }
     }
     return answer;
 }
