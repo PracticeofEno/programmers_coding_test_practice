@@ -13,30 +13,37 @@ vector<int> solution(int e, vector<int> starts)
 {
     vector<int> answer;
 
-    vector<vector<int>> arr2;
+    vector<vector<int>> arr2 (e + 1, vector<int> (2, 0));
     map<int, int> available;
     int answer_index = -1;
     int max = -1;
 
-    for (int i = 0; i <= e; i++)
-    {
-        vector<int> tmp;
-        tmp.push_back(i);
-        tmp.push_back(0);
-        arr2.push_back(tmp);
+    for (int i = 1; i <= e; i++) {
+        arr2[i][0] = i;
+        arr2[i][1] = arr2[i][1] + 1;
     }
-    for (int i = 2; i <= e; i++)
-    {
-        int count = 0;
-        for(int j = 1 ; j <= sqrt(i) ; j++){
-             if(i % j == 0) {
-                count++;
-                if(i / j != j) 
-                    count++;
-            }
-        }   
-        arr2[i][1] = count;
+	
+    //2부터 e까지의 숫자에 대한 약수 정보 삽입
+    for (int i = 2; i <= e; i++) {
+        for (int k = 1; k <= e / i; k++) {
+            arr2[i * k][1] = arr2[i*k][1] + 1;
+        }
     }
+    // for (int i = 0; i <= e; i++)
+    // {
+    //     arr2[i][0] = i;
+    //     if (i >= 2) {
+    //         int count = 0;
+    //         for(int j = 1 ; j <= sqrt(i) ; j++){
+    //             if(i % j == 0) {
+    //                 count++;
+    //                 if(i / j != j) 
+    //                     count++;
+    //             }
+    //         }   
+    //         arr2[i][1] = count;
+    //     }
+    // }
     sort(arr2.begin(), arr2.begin() + e + 1, cmp);
 
     for (int i = 0; i < starts.size(); i++)
