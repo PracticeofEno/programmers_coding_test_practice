@@ -2,32 +2,31 @@
 
 # 각 works의 제곱을 더한 값이 최소가 되도록 만들어야 함
 # n만큼 works에서 수치를 뺼 수 있음. 즉 큰 수부터 n만큼 빼주면 됨
-# 정렬된 자료구조를 가지며, 가장 큰 수부터 가져와서 1씩 빼주는걸 반복하면 됨
-# 여기서 효율적으로 만들고자 할수 있겠지만 가장 간단한 알고리즘으로써 list를 만들고 빼주고 정렬하고 형태로 선택
-from queue import PriorityQueue
-
 
 def solution(n, works: list):
-    pq = PriorityQueue()
+    index_list = {}
+    max = 0
+    for i in range(50000):
+        index_list[i] = 0
     for work in works:
-        print(f"get priority: {work}, work: {-work}")
-        pq.put((-work, work))
+        index_list[work] += 1
+        if max < work:
+            max = work
     for _ in range(n):
-        if pq.empty():
+        if max < 0:
             break
-        priority, work = pq.get()
-        print(f"get priority: {priority}, work: {work}")
-        if work == 1:
-            continue
-        print(f"put priority: {priority + 1}, work: {work - 1}")
-        print("")
-        pq.put((priority + 1, work - 1))
-    data = [work for _, work in pq.queue]
-    overtime_index = sum([i ** 2 for i in data])
-    print(overtime_index)
-    return overtime_index
+        if index_list[max] > 0:
+            index_list[max] -= 1
+            if max > 0:
+                index_list[max-1] += 1
+            if index_list[max] == 0:
+                max -= 1
+    indexs = [i for i in range(50000) if index_list[i] > 0]
+    overtime_indexs = sum([(i ** 2) * index_list[i] for i in indexs])
+    print(overtime_indexs)
+    return overtime_indexs
 
-n = 4
-works= [4, 3, 3]
+n = 9
+works= [1,1,1]
 result = solution(n, works) # 12
 print(result)
